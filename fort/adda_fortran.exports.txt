@@ -1,0 +1,61 @@
+Microsoft (R) COFF/PE Dumper Version 14.29.30159.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file adda_fortran.dll
+
+File Type: DLL
+
+  Section contains the following exports for adda_fortran.dll
+
+    00000000 characteristics
+    698B4371 time date stamp Tue Feb 10 15:40:49 2026
+        0.00 version
+           1 ordinal base
+          21 number of functions
+          21 number of names
+
+    ordinal hint RVA      name
+
+          1    0 00001540 bjndd_
+          2    1 0000A5A0 cfft99_
+          3    2 0000AD30 cftfax_
+          4    3 00003D80 cftrig_
+          5    4 00001AE0 cik01_
+          6    5 0000AE40 d07hre_
+          7    6 0000B580 d09hre_
+          8    7 0000C240 d113re_
+          9    8 0000C5C0 d132re_
+         10    9 0000C900 dadhre_
+         11    A 0000E300 dchhre_
+         12    B 0000E6B0 dcuhre_
+         13    C 0000EB00 dfshre_
+         14    D 0000F200 dinhre_
+         15    E 0000F780 drlhre_
+         16    F 00010740 dtrhre_
+         17   10 00003E30 fact_
+         18   11 000110C0 fonctionigtadda_
+         19   12 01E9E980 k0xyz_
+         20   13 000117A0 propaespacelibreintadda_
+         21   14 00004300 vpassm_
+
+  Summary
+
+     1E85000 .bss
+        1000 .data
+        1000 .debug_abbrev
+        1000 .debug_aranges
+        1000 .debug_frame
+        2000 .debug_info
+        1000 .debug_line
+        1000 .debug_line_str
+        1000 .debug_str
+        1000 .edata
+        1000 .eh_frame
+        1000 .idata
+        1000 .pdata
+        2000 .rdata
+        1000 .reloc
+       13000 .text
+        1000 .tls
+        1000 .xdata
