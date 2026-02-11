@@ -118,14 +118,14 @@ This directory defines the entire conversion layer.
 
 ------------------------------------------------------------------------
 
-### `./`  The root directory contains:
+### `/.`  The root directory contains:
 
 -   Makefiles for Linux:
     -   C99 build (original ADDA sources)  
     -   C++ build (converted sources)
--   Windows batch files for:
-    -   Fortran compilation
-    -   Full build process
+-    Makefiles for Windows:
+    -   C99 build (original ADDA sources)  
+    -   C++ build (converted sources)
 -   Visual Studio project file
 
 -   Windows DLLs and import libraries 
