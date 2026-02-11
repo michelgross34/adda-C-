@@ -1,31 +1,384 @@
-<img src='https://raw.githubusercontent.com/wiki/adda-team/adda/img/adda.svg?sanitize=true' align='right'>
+# ADDA C++ Port (Automated C99 → C++ Conversion)
 
-ADDA (pronounced /ˈɑddɑ/) is a C software package (console application) to calculate scattering and absorption of electromagnetic waves by particles of arbitrary shape and composition using the discrete dipole approximation (DDA). The particles can be located in a homogeneous medium or near a plane substrate; emission (decay-rate) enhancement of point emitters can also be calculated. The main feature of ADDA is the ability to run on a multiprocessor system or multicore processors (parallelizing a _single_ DDA simulation). It can also employ modern GPUs to accelerate computations. ADDA is intended to be a [versatile tool](https://github.com/adda-team/adda/wiki/Features), suitable for a wide variety of applications ranging from interstellar dust and atmospheric aerosols to metallic nanoparticles and biological cells. Its applicability is limited only by [available computer resources](https://github.com/adda-team/adda/wiki/LargestSimulations).
+This repository is a fork of the original ADDA project. It provides an
+automated and reproducible C99-to-C++ conversion layer designed to:
 
-ADDA [originated](https://github.com/adda-team/adda/wiki/EarlyHistory) at the University of Amsterdam but has then evolved into an open-source international project. It is used in [about 30 countries](https://github.com/adda-team/adda/wiki/Publications),  including 7 out of top 12 universities (according to [THE World University Rankings 2023](https://www.timeshighereducation.com/world-university-rankings/2023/world-ranking)). Corresponding papers have been published in [Science](https://doi.org/10.1126/science.abm7915), [Nature Photonics](https://doi.org/10.1038/s41566-022-00983-3), and [Nature Nanotechnology](https://doi.org/10.1038/nnano.2012.51), among many other journals. We recommend to start with one of the following:
-* [Getting started (wikis)](https://github.com/adda-team/adda/wiki)
-* [Java-based GUI](https://github.com/adda-team/adda-gui)
-* [Manual](doc/manual.pdf)
-* [FAQ](https://github.com/adda-team/adda/wiki/FAQ)
-* [Features](https://github.com/adda-team/adda/wiki/Features)
-* [Releases/Downloads](https://github.com/adda-team/adda/releases) (source code and 64-bit Windows executables)
-* [Compiling ADDA](https://github.com/adda-team/adda/wiki/CompilingADDA)
+-   Enable compilation with C++ compilers such as `g++`
+-   Enable compilation with Microsoft toolchains (MSVC)
+-   Avoid manual code edits that would complicate future synchronization
+    with upstream ADDA
+-   Maintain structural compatibility with future official ADDA releases
 
-If you choose to use ADDA, please [subscribe](mailto:adda-announce+subscribe@googlegroups.com) to [announcement mailing list](http://groups.google.com/group/adda-announce); "registered" users of ADDA will be notified when updates to the code are made. If you publish results obtained using ADDA, you should acknowledge the source of the code. The general reference is – Yurkin M.A. and Hoekstra A.G. The discrete-dipole-approximation code ADDA: capabilities and known limitations, [_J. Quant. Spectrosc. Radiat. Transfer_ **112**, 2234–2247](http://doi.org/10.1016/j.jqsrt.2011.01.031) (2011).
-Please also look at [a list of more specific references](https://github.com/adda-team/adda/wiki/References).
+The conversion process is deterministic and script-driven to minimize
+divergence from upstream sources.
 
-We encourage users to provide feedback in any possible way. If you have any questions, please [write](mailto:adda-discuss@googlegroups.com) to the [discussion group](http://groups.google.com/group/adda-discuss). If you have any suggestions or a bug report, submit it directly to the [issue tracker](https://github.com/adda-team/adda/issues), taking advantage of the open development process. Please also provide feedback on the existing issues – you may upvote issues that you find important (GitHub account is required) and/or provide some meaningful comments.
+------------------------------------------------------------------------
 
-### Directory structure
+## Repository Structure
 
-* `.github/` – GitHub-related settings
-* `devtools/` – tools used by ADDA developers
-* `doc/` – documentation
-* `examples/` – examples of using ADDA
-* `input/` – default input files
-* `misc/` – additional tools, relatively independent from the main part of ADDA
-* `sample/` – sample output and other files
-* `src/` – source files and makefiles
-* `tests/` – various tests to make the development of ADDA more robust
-* `win64/` – executables for 64-bit (x86\_64) Windows
-* `LICENSE` – GNU General Public License v3.0
+    /
+    ├── src_cc/              # Original ADDA C99 source files
+    ├── src_cxx/             # Automatically converted C++ sources
+    ├── fort/                # Fortran sources + build scripts
+    ├── fftw/                # Windows import library generation for FFTW
+    ├── converting_tools/    # Python conversion script + compatibility header
+    ├── Makefile(s)          # Linux and Windows build configurations
+    ├── Visual Studio project
+    ├── FFTW and ADDA fortran DLLs and import libraries (*dll.a)
+------------------------------------------------------------------------
+
+## Conversion Strategy
+
+The C → C++ conversion is performed automatically to ensure:
+
+-   No manual rewriting of logic
+-   Minimal maintenance overhead
+-   Compatibility with future ADDA updates
+
+### Conversion Workflow
+
+1.  Copy `*.c` files from `src_cc/`
+2.  Rename to `*.cpp`
+3.  Run the Python conversion script:
+
+```{=html}
+<!-- -->
+```
+    converting_tools/fix_macro.py
+
+4.  Include the compatibility header:
+
+```{=html}
+<!-- -->
+```
+    converting_tools/cxx.h
+
+The header `cxx.h` resolves C/C++ incompatibilities (macros, symbol
+linkage, etc.) required for clean C++ compilation.
+
+No semantic rewriting of ADDA is performed.
+
+------------------------------------------------------------------------
+
+## Directory Details
+
+### `/src_cc`
+
+Contains the original C99 ADDA source files.
+
+These remain untouched to allow straightforward synchronization with
+upstream ADDA.
+
+------------------------------------------------------------------------
+
+### `/src_cxx`
+
+Contains the automatically converted C++ source files generated from
+`src_cc`.
+
+These are intended for: - `g++` compilation on Linux - MSVC compilation
+on Windows
+
+------------------------------------------------------------------------
+
+### `/fort`
+
+Contains the Fortran source code required by ADDA.
+
+Includes:
+
+-   Linux Makefile to build a static Fortran library
+-   Windows `.bat` script to build:
+    -   Fortran DLL
+    -   Associated import library
+
+This allows linking from both GCC/G++ and MSVC environments.
+
+------------------------------------------------------------------------
+
+### `/fftw`
+
+Contains a Windows batch script to generate an import library from the
+official FFTW DLL distribution.
+
+Since FFTW Windows binaries are distributed as DLLs without MSVC import
+libraries, this script creates the required `.lib` file for Visual
+Studio linking.
+
+------------------------------------------------------------------------
+
+### `/converting_tools`
+
+Contains:
+
+-   `fix_macro.py` --- automated C → C++ conversion script
+-   `cxx.h` --- compatibility header required for C++ builds
+
+This directory defines the entire conversion layer.
+
+------------------------------------------------------------------------
+
+## Build System
+
+The root directory contains:
+
+-   Makefiles for Linux:
+    -   C99 build (original ADDA sources)
+    -   C++ build (converted sources)
+-   Windows batch files for:
+    -   Fortran compilation
+    -   Full build process
+-   Visual Studio project file
+
+------------------------------------------------------------------------
+
+## Windows Support
+
+To simplify Windows compilation:
+
+The root directory includes: - Prebuilt Fortran DLL - Associated import
+library - FFTW DLL - FFTW import library
+
+This allows building ADDA (C99 or C++) directly in Visual Studio without
+requiring manual DLL import generation.
+
+------------------------------------------------------------------------
+
+## Linux Support
+
+Under Linux you may:
+
+-   Build original ADDA in C99 using GCC
+-   Build converted ADDA in C++ using G++
+-   Compile Fortran components as static libraries
+-   Link against system FFTW
+
+------------------------------------------------------------------------
+
+## Design Philosophy
+
+This fork:
+
+-   Does not rewrite ADDA in idiomatic C++
+-   Does not refactor core algorithms
+-   Preserves original ADDA logic
+-   Adds a thin automated compatibility layer
+
+The objective is portability and toolchain flexibility, not redesign.
+
+------------------------------------------------------------------------
+
+## Intended Use Cases
+
+-   Compilation with non-GCC compilers
+-   Integration into C++-based simulation frameworks
+-   Windows native builds using MSVC
+-   Controlled experimental modernization without breaking upstream
+    compatibility
+
+------------------------------------------------------------------------
+
+## Maintenance Model
+
+When a new ADDA release is published:
+
+1.  Replace contents of `src_cc/` with upstream sources
+2.  Re-run `fix_macro.py`
+3.  Rebuild `src_cxx/`
+
+No manual porting should be required.
+
+------------------------------------------------------------------------
+
+## Disclaimer
+
+This repository is an independent fork and is not affiliated with the
+official ADDA maintainers.
+
+All original algorithmic content belongs to the ADDA authors.
+
+This fork provides only:
+
+-   Automated C++ conversion tooling
+-   Cross-platform build infrastructure
+-   Windows compatibility enhancements
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ADDA C++ Port (Automated C99 → C++ Conversion)
+
+This repository is a fork of the original ADDA project. It provides an automated and reproducible C99-to-C++ conversion layer designed to:
+
+- Enable compilation with C++ compilers such as g++
+
+- Enable compilation with Microsoft toolchains (MSVC)
+
+- Avoid manual code edits that would complicate future synchronization with upstream ADDA
+
+- Maintain structural compatibility with future official ADDA releases
+
+- The conversion process is deterministic and script-driven to minimize divergence from upstream sources.
+
+/
+├── src_cc/              # Original ADDA C99 source files
+├── src_cxx/             # Automatically converted C++ sources
+├── fort/                # Fortran sources + build scripts
+├── fftw/                # Windows import library generation for FFTW
+├── converting_tools/    # Python conversion script + compatibility header
+├── Makefile(s)          # Linux and Windows build configurations
+├── Visual Studio project
+├── FFTW and ADDA fortran DLLs and import libraries (*dll.a)
+
+## Conversion Strategy
+
+- The C → C++ conversion is performed automatically to ensure:
+
+- No manual rewriting of logic
+
+- Minimal maintenance overhead
+
+- Compatibility with future ADDA updates
+
+## Conversion Workflow
+
+ - Copy *.c and *.h files from src_cc/
+
+ - Rename *.c to *.cpp
+
+ - Run the Python conversion script:  /converting_tools/fix_macro.py
+
+ - Include the compatibility header:  /converting_tools/cxx.h
+
+ The header cxx.h resolves C/C++ incompatibilities (macros, symbol linkage, etc.) required for clean C++ compilation.
+
+## Directory Details
+- /src_cc
+
+ Contains the original C99 ADDA source files.
+
+ These remain untouched to allow straightforward synchronization with upstream ADDA.
+
+- /fftw
+
+Contains a Windows batch script to generate an import library from the official FFTW DLL distribution.
+
+Since FFTW Windows binaries are distributed as DLLs without MSVC import libraries, this script creates the required .lib file for Visual Studio linking.
+
+/converting_tools
+
+Contains:
+
+fix_macro.py — automated C → C++ conversion script
+
+cxx.h — compatibility header required for C++ builds
+
+This directory defines the entire conversion layer.
+
+Build System
+
+The root directory contains:
+
+Makefiles for Linux:
+
+C99 build (original ADDA sources)
+
+C++ build (converted sources)
+
+Windows batch files for:
+
+Fortran compilation
+
+Full build process
+
+Visual Studio project file
+
+Windows Support
+
+To simplify Windows compilation:
+
+The root directory includes:
+
+Prebuilt Fortran DLL
+
+Associated import library
+
+FFTW DLL
+
+FFTW import library
+
+This allows building ADDA (C99 or C++) directly in Visual Studio without requiring manual DLL import generation.
+
+Linux Support
+
+Under Linux you may:
+
+Build original ADDA in C99 using GCC
+
+Build converted ADDA in C++ using G++
+
+Compile Fortran components as static libraries
+
+Link against system FFTW
+
+Design Philosophy
+
+This fork:
+
+Does not rewrite ADDA in idiomatic C++
+
+Does not refactor core algorithms
+
+Preserves original ADDA logic
+
+Adds a thin automated compatibility layer
+
+The objective is portability and toolchain flexibility, not redesign.
+
+Intended Use Cases
+
+Compilation with non-GCC compilers
+
+Integration into C++-based simulation frameworks
+
+Windows native builds using MSVC
+
+Controlled experimental modernization without breaking upstream compatibility
+
+Maintenance Model
+
+When a new ADDA release is published:
+
+Replace contents of src_cc/ with upstream sources
+
+Re-run fix_macro.py
+
+Rebuild src_cxx/
+
+No manual porting should be required.
+
+Disclaimer
+
+This repository is an independent fork and is not affiliated with the official ADDA maintainers.
+
+All original algorithmic content belongs to the ADDA authors.
+
+This fork provides only:
+
+Automated C++ conversion tooling
+
+Cross-platform build infrastructure
+
+Windows compatibility enhancements
