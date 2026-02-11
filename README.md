@@ -118,8 +118,7 @@ This directory defines the entire conversion layer.
 
 ------------------------------------------------------------------------
 
-
-### The root directory contains:
+### `./`  The root directory contains:
 
 -   Makefiles for Linux:
     -   C99 build (original ADDA sources)  
