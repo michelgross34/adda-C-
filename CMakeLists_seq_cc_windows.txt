@@ -1,0 +1,108 @@
+
+
+
+
+
+
+
+
+cmake_minimum_required(VERSION 3.16)
+
+project(adda_seq_cc LANGUAGES C)
+
+# ------------------------------------------------------------------
+# Standard C99
+# ------------------------------------------------------------------
+
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
+
+# ------------------------------------------------------------------
+# Output directory
+# ------------------------------------------------------------------
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# ------------------------------------------------------------------
+# Sources
+# ------------------------------------------------------------------
+
+set(SRC_DIR ${CMAKE_SOURCE_DIR}/src_cc)
+
+set(SOURCES
+        ${SRC_DIR}/ADDAmain.c
+        ${SRC_DIR}/io.c
+        ${SRC_DIR}/CalculateE.c
+        ${SRC_DIR}/calculator.c
+        ${SRC_DIR}/chebyshev.c
+        ${SRC_DIR}/cmplx.c
+        ${SRC_DIR}/comm.c
+        ${SRC_DIR}/crosssec.c
+        ${SRC_DIR}/fft.c
+        ${SRC_DIR}/GenerateB.c
+        ${SRC_DIR}/igt_so.c
+        ${SRC_DIR}/interaction.c
+        ${SRC_DIR}/iterative.c
+        ${SRC_DIR}/linalg.c
+        ${SRC_DIR}/make_particle.c
+        ${SRC_DIR}/memory.c
+        ${SRC_DIR}/mt19937ar.c
+        ${SRC_DIR}/param.c
+        ${SRC_DIR}/Romberg.c
+        ${SRC_DIR}/sinint.c
+        ${SRC_DIR}/somnec.c
+        ${SRC_DIR}/timing.c
+        ${SRC_DIR}/vars.c
+        ${SRC_DIR}/matvec.c
+)
+
+# ------------------------------------------------------------------
+# Executable
+# ------------------------------------------------------------------
+
+add_executable(adda_seq_cc ${SOURCES})
+
+# ------------------------------------------------------------------
+# Optimisation
+# ------------------------------------------------------------------
+
+if (MSVC)
+    target_compile_options(adda_seq_cc PRIVATE
+            $<$<CONFIG:Release>:/O2>
+    )
+else()
+    target_compile_options(adda_seq_cc PRIVATE
+            -O2
+    )
+endif()
+
+# ------------------------------------------------------------------
+# Definitions
+# ------------------------------------------------------------------
+
+target_compile_definitions(adda_seq_cc PRIVATE
+        SLICE_FFT
+        FFTW
+        NO_GITHASH
+)
+
+# ------------------------------------------------------------------
+# Include directories
+# ------------------------------------------------------------------
+
+target_include_directories(adda_seq_cc PRIVATE
+        ${CMAKE_SOURCE_DIR}/fftw
+)
+
+# ------------------------------------------------------------------
+# Link libraries
+# ------------------------------------------------------------------
+
+target_link_libraries(adda_seq_cc PRIVATE
+        ${CMAKE_SOURCE_DIR}/libadda_fortran.dll.a
+        ${CMAKE_SOURCE_DIR}/libfftw3-3.dll.a
+)
+
+
+
