@@ -20,11 +20,16 @@ divergence from upstream sources.
     ├── src_cc/              # Original ADDA C99 source files
     ├── src_cxx/             # Automatically converted C++ sources
     ├── fort/                # Fortran sources + build scripts
-    ├── fftw/                # Windows import library generation for FFTW
+    ├── fftw/                # Windows import library generation for FFTW and FFTW header
+    ├── clff/                # Windows import library generation for clFFT and cFFT headers (/include)
+    ├── clBLAS/              # Windows import library generation for clBLAS and clBLAS headers (/include)
+    ├── opencl/              # Windows import library generation for OpenCl and penCl headers (/CL) 
     ├── converting_tools/    # Python conversion script + compatibility header
     ├── Makefile(s)          # Linux and Windows build configurations
     ├── Visual Studio project
     ├── FFTW and ADDA fortran DLLs and import libraries (*dll.a)
+    ├── .../                 # official ADDA sub-directories 
+
 ------------------------------------------------------------------------
 
 ## Conversion Strategy
