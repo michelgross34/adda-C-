@@ -140,7 +140,31 @@ This directory defines the entire conversion layer.
     
 -   Visual Studio project file.
 
--   Windows DLLs and import libraries 
+-   Windows DLLs and import libraries. 
+ 
+ The root directory can be good place holder for all DLLs and imports library. I have for example: 
+  
+11/02/2026  15:27           134 109 adda_fortran.dll
+
+12/02/2026  12:59        19 111 424 clBLAS.dll
+
+08/02/2026  16:39         1 275 013 libclFFT.dll
+
+01/02/2026  16:25         2 712 765 libfftw3-3.dll
+
+11/02/2026  15:16           107 110 libadda_fortran.a
+
+11/02/2026  15:27            13 774 libadda_fortran.dll.a
+
+12/02/2026  11:45           133 890 libclBLAS.dll.a
+
+12/02/2026  11:44            28 874 libclFFT.dll.a
+
+11/02/2026  15:18           182 028 libfftw3-3.dll.a
+
+12/02/2026  11:46            97 204 libOpenCL.a
+
+               
 
 
 ------------------------------------------------------------------------
