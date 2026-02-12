@@ -10,8 +10,10 @@ The  OpenCl package is installed when installing the GPU driver
  - copy headers into  "./opencl/CL" 
  
  - Extract the import library and copy it tho the root directory
-         make_openccl.bat 
-         copy libOpenCL.a ..
+     
+     - make_openccl.bat 
+     
+     - copy libOpenCL.a ..
 
  - It is not needed to copy OpenCL.dll into the *.exe directoty
 
