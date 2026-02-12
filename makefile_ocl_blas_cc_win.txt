@@ -1,0 +1,241 @@
+# modify the code to chonge io.h -> adda_io.h : comflict with windows <io.h>  header
+# change header order in memory.c : memory.h must be the last header  
+
+###############################################################################
+# TOOLCHAIN (MinGW)
+###############################################################################
+
+CC      = gcc      # gcc for test
+#CC      = mpicc    # real world
+
+SRC_DIR = src_cc
+BUILD_DIR = bin
+MAKE_DIR=.
+TARGET = $(BUILD_DIR)/adda_ocl_blas_cc.exe
+
+##################################################
+#   Edit the following directories dir *.exe
+###########################################
+
+#OPENCL_INCL_DR = C:/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v12.9/include
+#OPENCL_INCL_DIR = C:/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v12.9/include
+
+#CLFFT_INCL_DIR= E:/msna6/clFFT-master/src/include  #E:\msna6\clFFT-master\src\include
+#CLFFT_VERSION_INCL_DIR= E:/msna6/clFFT-master/src/build/include
+#CLBLAS_INCL_DIR= E:/msna6/clBLAS-master/src
+#CLBLAS_VERSION_INCL_DIR= E:/msna6/clBLAS-master/src/cmake-build-release_mingw64/include
+
+
+###############################################################################
+# FLAGS  COMPILER
+###############################################################################
+
+CFLAGS  = -O2 -std=c11 
+CFLAGS += -I$(MAKE_DIR)/fftw
+CFLAGS += -I$(MAKE_DIR)/clFFT/include
+CFLAGS += -I$(MAKE_DIR)/clBLAS/include
+CFLAGS += -I$(MAKE_DIR)/opencl
+
+#CFLAGS += -I$(CLBLAS_INCL_DIR) 
+#CFLAGS += -I$(CLBLAS_VERSION_INCL_DIR) 
+
+CFLAGS  += -DOPENCL
+CFLAGS += -DOCL_BLAS
+#CFLAGS += -DADDA_MPI
+
+
+
+CFLAGS += -DSLICE_FFT
+#CFLAGS += -DCLFFT
+CFLAGS += -DFFTW
+CFLAGS += -DNO_GITHASH
+###############################################################################
+# FLAGS  LINKER
+###############################################################################
+
+# DLLs import libraries from src/fort and src/fftw
+LDFLAGS += -L. -ladda_fortran -lfftw3-3 
+
+LDFLAGS +=  -lOpenCL 
+LDFLAGS +=  -lclFFT
+LDFLAGS +=  -lclBLAS
+
+###############################################################################
+# OBJECT FILES
+###############################################################################
+
+OBJS = \
+$(BUILD_DIR)/io.o \
+$(BUILD_DIR)/CalculateE.o \
+$(BUILD_DIR)/calculator.o \
+$(BUILD_DIR)/chebyshev.o \
+$(BUILD_DIR)/cmplx.o \
+$(BUILD_DIR)/comm.o \
+$(BUILD_DIR)/crosssec.o \
+$(BUILD_DIR)/fft.o \
+$(BUILD_DIR)/GenerateB.o \
+$(BUILD_DIR)/igt_so.o \
+$(BUILD_DIR)/interaction.o \
+$(BUILD_DIR)/iterative.o \
+$(BUILD_DIR)/linalg.o \
+$(BUILD_DIR)/make_particle.o \
+$(BUILD_DIR)/mt19937ar.o \
+$(BUILD_DIR)/Romberg.o \
+$(BUILD_DIR)/sinint.o \
+$(BUILD_DIR)/somnec.o \
+$(BUILD_DIR)/timing.o \
+$(BUILD_DIR)/vars.o \
+$(BUILD_DIR)/ADDAmain.o \
+$(BUILD_DIR)/param.o \
+$(BUILD_DIR)/memory.o \
+$(BUILD_DIR)/oclcore.o \
+$(BUILD_DIR)/oclmatvec.o 
+#$(BUILD_DIR)/matvec.o
+
+
+
+
+
+
+###############################################################################
+# DEFAULT TARGET
+###############################################################################
+
+all: $(TARGET)
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+###############################################################################
+# LINK
+###############################################################################
+
+$(TARGET): $(BUILD_DIR) $(OBJS)
+	$(CC) $(OBJS) -o $(TARGET) $(LDFLAGS)
+
+
+
+###############################################################################
+# CLEAN
+###############################################################################
+
+clean:
+	rm -f $(BUILD_DIR)/*.o $(TARGET)
+
+
+
+###############################################################################
+# COMPILATION RULE
+###############################################################################
+
+#$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
+#	$(CC) $(CFLAGS) -c $< -o $@
+
+
+###############################################################################
+# C FILES — EXPLICIT RULES (GNU make + gcc)
+###############################################################################
+
+$(BUILD_DIR)/ADDAmain.o: $(SRC_DIR)/ADDAmain.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/io.o: $(SRC_DIR)/io.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/CalculateE.o: $(SRC_DIR)/CalculateE.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/calculator.o: $(SRC_DIR)/calculator.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/chebyshev.o: $(SRC_DIR)/chebyshev.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/cmplx.o: $(SRC_DIR)/cmplx.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/comm.o: $(SRC_DIR)/comm.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/crosssec.o: $(SRC_DIR)/crosssec.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/fft.o: $(SRC_DIR)/fft.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/GenerateB.o: $(SRC_DIR)/GenerateB.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/igt_so.o: $(SRC_DIR)/igt_so.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/interaction.o: $(SRC_DIR)/interaction.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/linalg.o: $(SRC_DIR)/linalg.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/make_particle.o: $(SRC_DIR)/make_particle.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/memory.o: $(SRC_DIR)/memory.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/mt19937ar.o: $(SRC_DIR)/mt19937ar.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/param.o: $(SRC_DIR)/param.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/Romberg.o: $(SRC_DIR)/Romberg.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/sinint.o: $(SRC_DIR)/sinint.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/somnec.o: $(SRC_DIR)/somnec.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/timing.o: $(SRC_DIR)/timing.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/vars.o: $(SRC_DIR)/vars.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/oclmatvec.o: $(SRC_DIR)/oclmatvec.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/oclcore.o: $(SRC_DIR)/oclcore.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+
+$(BUILD_DIR)/iterative.o: $(SRC_DIR)/iterative.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+
+
