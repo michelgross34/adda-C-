@@ -9,7 +9,8 @@
 - copy DLLs and include headers in ./clFFT/include
 
 - extract the import library from the dll and copy it to the root directory:
-    build_libclFFT.bat
-    copy libclFFT.dll.a  ..
+    
+    - build_libclFFT.bat
+    - copy libclFFT.dll.a  ..
 
 - copy DLLs in the final *.exe directory
