@@ -1753,7 +1753,7 @@ PARSE_FUNC(V)
 #	else // this should never happen, since minimum OpenCL version is checked in oclcore.h
 #		error "OpenCL version not recognized"
 #	endif
-		printf("GPU-accelerated version conforming to OpenCL standard "OCL_VERSION"\n");
+		printf("GPU-accelerated version conforming to OpenCL standard " OCL_VERSION "\n");
 #	ifdef CLFFT
 		printf("Linked to clFFT version %d.%d.%d\n",clfftVersionMajor,clfftVersionMinor,clfftVersionPatch);
 #	endif

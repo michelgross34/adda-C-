@@ -34,6 +34,8 @@
 
 // SEMI-GLOBAL VARIABLES
 
+
+
 // defined and initialized in calculator.c
 extern doublecomplex * restrict E_ad;
 extern double * restrict E2_alldir;

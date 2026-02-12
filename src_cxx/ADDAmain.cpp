@@ -67,6 +67,8 @@ int main(int argc,char **argv)
 	_setmode(_fileno(stdout),_O_TEXT);
 	_setmode(_fileno(stderr),_O_TEXT);
 #endif
+
+
 	// Initialize error handling and line wrapping
 	logfile=NULL;
 	term_width=DEF_TERM_WIDTH;
