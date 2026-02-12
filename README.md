@@ -17,7 +17,7 @@ divergence from upstream sources.
 ## Repository Structure
 
     /
-    ├── src/              # Original ADDA C99 source files
+    ├── src_cc/              # Original ADDA C99 source files
     ├── src_cxx/             # Automatically converted C++ sources
     ├── fort/                # Fortran sources + build scripts
     ├── fftw/                # Windows import library generation for FFTW
@@ -74,7 +74,7 @@ upstream ADDA.
 ### `/src_cxx`
 
 Contains the automatically converted C++ source files generated from
-`src_cc`.
+`src`.
 
 These are intended for: - `g++` compilation on Linux - MSVC compilation
 on Windows
@@ -96,14 +96,13 @@ This allows linking from both GCC/G++ and MSVC environments.
 
 ------------------------------------------------------------------------
 
-### `/fftw`
+### `/fftw` `/opencl`  `/clFFT `  `/clBLAS `
 
-Contains a Windows batch script to generate an import library from the
-official FFTW DLL distribution.
+Theses directories contains Windows batch scripts that generate GNU import libraries (*.dll.a) from the official DLL distributions of FFTW, OpenCL, clFFT, and clBLAS.
 
-Since FFTW Windows binaries are distributed as DLLs without MSVC import
-libraries, this script creates the required `.dll.a` file for Visual
-Studio linking.
+Since the Windows binaries of FFTW are distributed as DLLs without accompanying MSVC import libraries, these scripts create the required .dll.a files for linking with GCC/MinGW/MSVC and compatible toolchains on Windows.
+
+These subdirectories also serve as placeholders for the corresponding header directories (/include and /CL).
 
 ------------------------------------------------------------------------
 
@@ -121,14 +120,23 @@ This directory defines the entire conversion layer.
 ### `/.`  The root directory contains:
 
 -   Makefiles for Linux:
+    -   C99 build (original ADDA sources )  
+    -   C++ build (converted sources)
+-   Makefiles for Windows for mingw compilers:
     -   C99 build (original ADDA sources)  
     -   C++ build (converted sources)
--    Makefiles for Windows:
-    -   C99 build (original ADDA sources)  
+
+-   CMakeLists.txt project files for Linux
+    -   C99 build (original ADDA sources )  
     -   C++ build (converted sources)
--   Visual Studio project file
+-   CMakeLists.txt project files for Windows  
+    -   C99 build for mingw compilers
+    -   C++ build for mingw and MSVC compilers
+    
+-   Visual Studio project file.
 
 -   Windows DLLs and import libraries 
+
 
 ------------------------------------------------------------------------
 
