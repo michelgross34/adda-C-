@@ -21,6 +21,7 @@ MACROS = [
     "GFORM7L",
     "GFORM10L",
     "GFORMDEF3V",
+    "ADDA_VERSION",
     "CFORM3V",
     "MUEL_RMSE_FORMAT_FULL",
     "RESID_STRING",
